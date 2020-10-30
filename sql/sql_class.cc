@@ -1725,7 +1725,9 @@ void THD::awake(killed_state state_to_set)
       MYSQL_CALLBACK(scheduler, post_kill_notification, (this));
   }
 
+#ifdef WITH_WSREP
   if (wsrep_aborter == 0)
+#endif
   {
     /* Interrupt target waiting inside a storage engine. */
     if (state_to_set != NOT_KILLED)

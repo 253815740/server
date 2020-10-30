@@ -8869,6 +8869,7 @@ kill_one_thread(THD *thd, longlong id, killed_state kill_signal, killed_type typ
   DBUG_ENTER("kill_one_thread");
   DBUG_PRINT("enter", ("id: %lld  signal: %u", id, (uint) kill_signal));
 
+#ifdef WITH_WSREP
   DEBUG_SYNC(thd, "wsrep_kill_one_thread_started");
   /* first mark wsrep victim to avoid conflict with possible ongoing BF abort */
   if (WSREP(thd) )
@@ -8901,6 +8902,8 @@ kill_one_thread(THD *thd, longlong id, killed_state kill_signal, killed_type typ
       }
     }
   }
+#endif /* WITH_WSREP */
+
   /* continue with the usual victim kill procecedure */
   if (id && (tmp= find_thread_by_id(id, type == KILL_TYPE_QUERY)))
   {
